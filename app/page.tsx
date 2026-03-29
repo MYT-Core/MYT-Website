@@ -341,8 +341,8 @@ export default async function Home() {
             </p>
             <p className="text-sm text-muted-foreground">
               Hosting provided by{" "}
-              <a href="https://xbinodes.com/" target="_blank" rel="noreferrer" className="underline underline-offset-4">
-                xbinodes.com
+              <a href="https://xbinor.io/" target="_blank" rel="noreferrer" className="underline underline-offset-4">
+                xbinor.io
               </a>
               .
             </p>
