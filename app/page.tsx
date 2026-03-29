@@ -340,6 +340,13 @@ export default async function Home() {
               Community-driven website: This page is maintained by the community and is not hosted by the MYT core team.
             </p>
             <p className="text-sm text-muted-foreground">
+              Hosting provided by{" "}
+              <a href="https://xbinodes.com/" target="_blank" rel="noreferrer" className="underline underline-offset-4">
+                xbinodes.com
+              </a>
+              .
+            </p>
+            <p className="text-sm text-muted-foreground">
               Latest release: {releaseInfo.tag} ({releaseInfo.publishedAt})
             </p>
             <p className="text-xs text-muted-foreground/80">MYT</p>
