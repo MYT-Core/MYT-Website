@@ -7,7 +7,7 @@ export const mytConfig = {
     windowsBinary: "https://github.com/myt-core/MYT/releases/latest",
     documentation: "https://github.com/MYT-Core/MYT-Whitepaper",
     whitepaperRepo: "https://github.com/MYT-Core/MYT-Whitepaper",
-    whitepaperPdf: "/MYT_Whitepaper_v1.2.pdf",
+    whitepaperPdf: "/MYT_Whitepaper_v1.3.pdf",
     explorerMainnet: "https://explorer.myt-coin.com/",
     explorerTestnet: "https://testnet-explorer.myt-coin.com/",
     discord: "https://discord.gg/nuWjx7kvqp",
@@ -23,7 +23,7 @@ export const mytConfig = {
       "143c2deee12f40c5956e53a0c57c378cd11c8ddab649f53db2c414b51810aded",
   },
   whitepaper: {
-    version: "v1.2",
+    version: "v1.3",
   },
   release: {
     version: "v1.0.0-mainnet.3",
