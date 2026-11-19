@@ -97,7 +97,7 @@ async function refresh() {
     const url = new URL(
       process.env.MYT_MAINNET_EXPLORER_STATS_URL
         ?? process.env.MYT_MAINNET_EXPLORER_URL
-        ?? mytConfig.links.explorerMainnet,
+        ?? new URL("api/networkinfo", mytConfig.links.explorerMainnet).href,
     )
     if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash) {
       throw new Error("Invalid explorer statistics URL")
