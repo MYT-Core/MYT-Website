@@ -1,123 +1,75 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { Activity, Cpu, Network } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Card } from "@/components/ui/card"
 
-type NetworkStatsResponse = {
+type Stats = {
   blockHeight: string
   hashrate: string
   nodes: string
-  source: string
-  updatedAt: string
+  updatedAt: string | null
   live: boolean
 }
 
-const initialState: NetworkStatsResponse = {
-  blockHeight: "--",
-  hashrate: "--",
-  nodes: "--",
-  source: "",
-  updatedAt: "",
-  live: false,
-}
+const initial: Stats = { blockHeight: "—", hashrate: "—", nodes: "—", updatedAt: null, live: false }
+const metrics = [
+  { label: "Block height", key: "blockHeight", icon: Activity },
+  { label: "Network hashrate", key: "hashrate", icon: Cpu },
+  { label: "Estimated nodes", key: "nodes", icon: Network },
+] as const
 
 export function NetworkStats() {
-  const [stats, setStats] = useState<NetworkStatsResponse>(initialState)
+  const [stats, setStats] = useState(initial)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    let mounted = true
-
-    const fetchStats = async () => {
+    const controller = new AbortController()
+    let timer: ReturnType<typeof setTimeout>
+    async function refresh() {
       try {
         const response = await fetch("/api/network-stats", {
-          cache: "no-store",
+          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(10_000)]),
         })
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch network stats")
-        }
-
-        const payload = (await response.json()) as NetworkStatsResponse
-        if (mounted) {
-          setStats(payload)
-        }
+        if (!response.ok) throw new Error("Could not load statistics")
+        const next: Stats = await response.json()
+        if (!controller.signal.aborted) setStats(next)
       } catch {
-        if (mounted) {
-          setStats((current) => ({ ...current, live: false }))
-        }
+        if (!controller.signal.aborted) setStats((last) => ({ ...last, live: false }))
       } finally {
-        if (mounted) {
+        if (!controller.signal.aborted) {
           setLoading(false)
+          timer = setTimeout(refresh, 35_000)
         }
       }
     }
 
-    fetchStats()
-    const intervalId = window.setInterval(fetchStats, 20000)
-
+    void refresh()
     return () => {
-      mounted = false
-      window.clearInterval(intervalId)
+      controller.abort()
+      clearTimeout(timer)
     }
   }, [])
 
-  const updatedLabel = useMemo(() => {
-    if (!stats.updatedAt) {
-      return "Waiting for first update"
-    }
-
-    return new Date(stats.updatedAt).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    })
-  }, [stats.updatedAt])
-
+  const status = loading ? "Loading" : stats.live ? "Live from explorer" : stats.updatedAt ? "Last known values" : "Stats unavailable"
   return (
-    <Card className="border-primary/25 bg-card/60 p-6 shadow-[0_0_50px_-32px_rgba(67,191,255,0.6)] backdrop-blur-sm">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold">Mainnet Network Stats</h2>
-          <Badge
-            variant={stats.live ? "secondary" : "outline"}
-            className={stats.live ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : undefined}
-          >
-            {stats.live ? "Live from Explorer" : loading ? "Loading" : "Fallback"}
-          </Badge>
-        </div>
-        <p className="text-xs text-muted-foreground">Updated: {updatedLabel}</p>
+    <div className="network-card">
+      <div className="network-heading">
+        <h2>Mainnet</h2>
+        <span className={"network-status" + (stats.live ? " is-live" : "")} role="status">
+          <span aria-hidden="true" />{status}
+        </span>
       </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-primary/20 bg-background/60 p-4">
-          <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
-            <Activity className="h-4 w-4" />
-            Block Height
+      <dl className="network-metrics">
+        {metrics.map(({ label, key, icon: Icon }) => (
+          <div key={key}>
+            <dt><Icon size={15} aria-hidden="true" /> {label}</dt>
+            <dd>{stats[key]}</dd>
           </div>
-          <div className="text-2xl font-bold">{stats.blockHeight}</div>
-        </div>
-
-        <div className="rounded-xl border border-cyan-400/25 bg-background/60 p-4">
-          <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
-            <Cpu className="h-4 w-4" />
-            Hashrate
-          </div>
-          <div className="text-2xl font-bold">{stats.hashrate}</div>
-        </div>
-
-        <div className="rounded-xl border border-blue-400/20 bg-background/60 p-4">
-          <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
-            <Network className="h-4 w-4" />
-            Nodes
-          </div>
-          <div className="text-2xl font-bold">{stats.nodes}</div>
-        </div>
-      </div>
-
-      <p className="mt-4 text-xs text-muted-foreground">Source: {stats.source || "Explorer endpoint not configured yet."}</p>
-    </Card>
+        ))}
+      </dl>
+      {stats.updatedAt && <time className="stats-time" dateTime={stats.updatedAt}>
+        Updated {new Date(stats.updatedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} UTC
+      </time>}
+    </div>
   )
 }
