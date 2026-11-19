@@ -85,7 +85,7 @@ h1, h2, h3, p, dl, dd { margin: 0; }
   overflow: hidden;
   mask-image: radial-gradient(ellipse 71% 65% at 53% 50%, black 38%, transparent 81%);
 }
-.hero-visual img { object-fit: cover; object-position: center; }
+.hero-visual img { object-fit: contain; object-position: center; mix-blend-mode: lighten; -webkit-mask-image: radial-gradient(ellipse 62% 68% at 50% 50%, #000 55%, transparent 100%); mask-image: radial-gradient(ellipse 62% 68% at 50% 50%, #000 55%, transparent 100%); }
 
 .network-section { background: #090d17; padding: 0 0 42px; }
 .network-card {
@@ -129,22 +129,47 @@ h1, h2, h3, p, dl, dd { margin: 0; }
 .specs dt { font-size: 12px; color: var(--dim); }
 .specs dd { font-size: 16px; font-weight: 590; margin-top: 5px; }
 
-.section-machine { background: #080d19; }
-.machine-panel { display: grid; grid-template-columns: 1fr minmax(0, .85fr); align-items: center; gap: clamp(30px, 5vw, 70px); }
-.machine-copy .eyebrow { color: #a0bef6; }
-.machine-copy p:not(.eyebrow) { max-width: 420px; color: #aebbd2; font-size: 17px; line-height: 1.55; margin: 0 0 23px; }
+.section-machine { background: radial-gradient(ellipse at 50% 0%, #12204a 0%, transparent 60%), #070b16; }
+.machine-hero { max-width: 780px; margin: 0 auto clamp(40px, 6vw, 70px); text-align: center; }
+.machine-hero .eyebrow { color: #a0bef6; }
+.machine-hero h2 { margin: 12px 0 20px; }
+.machine-lead { color: #b6c3da; font-size: clamp(17px, 1.6vw, 20px); line-height: 1.6; letter-spacing: -.015em; }
+.machine-actions { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px 26px; margin-top: 30px; }
+.machine-actions .text-link { color: #a9caff; }
+.machine-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.machine-module { padding: clamp(22px, 2.6vw, 30px); border-radius: 22px; background: linear-gradient(180deg, #111a2e, #0c1322); border: 1px solid #1e2b45; transition: border-color .2s, transform .2s; }
+.machine-module:hover { border-color: #33508a; transform: translateY(-2px); }
+.module-head { display: flex; justify-content: space-between; align-items: center; color: #8fb8ff; }
+.module-head span { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #6f86ad; border: 1px solid #263552; border-radius: 999px; padding: 3px 10px; }
+.machine-module h3 { font-size: clamp(19px, 1.8vw, 23px); font-weight: 650; letter-spacing: -.035em; margin: 22px 0 8px; }
+.machine-module p { color: #a6b4cc; font-size: 15px; line-height: 1.55; }
+.machine-flow { margin: clamp(46px, 6vw, 80px) 0; }
+.machine-flow h3 { font-size: clamp(24px, 2.6vw, 32px); font-weight: 650; letter-spacing: -.045em; margin-bottom: 24px; }
+.machine-flow ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border-top: 1px solid #22304b; }
+.machine-flow li { padding: 22px 18px 0 0; }
+.flow-step { display: block; color: #5f8fe0; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 10px; }
+.machine-flow strong { display: block; font-size: 17px; font-weight: 640; letter-spacing: -.02em; margin-bottom: 6px; }
+.machine-flow p { color: #9fadc6; font-size: 14px; line-height: 1.55; }
+.machine-panel { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: stretch; gap: 16px; }
+.code-card { border-radius: 22px; background: #05080f; border: 1px solid #1e2b45; padding: 22px 24px; overflow: hidden; }
+.code-title { display: flex; gap: 8px; align-items: center; color: #8fa6c9; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+.code-card pre { margin: 0; overflow-x: auto; }
+.code-card pre code { font-family: var(--font-geist-mono), ui-monospace, monospace; font-size: 13px; line-height: 1.7; color: #d6e4ff; white-space: pre; }
 .claim-card {
-  min-width: 0;
-  border: 1px solid #2c3c5d;
-  border-radius: 28px;
-  padding: clamp(20px, 4vw, 44px);
-  background: radial-gradient(ellipse at 97% 0%, #1b315b, #10192c 74%);
+  padding: clamp(22px, 3vw, 32px);
+  border-radius: 22px;
+  background: linear-gradient(160deg, #13234a, #0d1528 70%);
+  border: 1px solid #2a3d66;
 }
-.claim-title { display: flex; gap: 9px; align-items: center; color: #c9ddff; font-size: 14px; font-weight: 600; margin-bottom: 25px; }
-.claim-card code { font-size: clamp(16px, 2.1vw, 26px); color: #f3f8ff; overflow-wrap: anywhere; }
+.claim-title { display: flex; gap: 9px; align-items: center; color: #c9ddff; font-size: 14px; font-weight: 600; margin-bottom: 22px; }
+.claim-card code { font-size: clamp(16px, 1.9vw, 23px); color: #f3f8ff; overflow-wrap: anywhere; }
 .claim-card code span { color: #8eebc1; white-space: nowrap; }
-.claim-card p { font-size: 15px; color: #b7c8e4; line-height: 1.55; margin: 17px 0 29px; }
-.review-status { display: inline-block; font-size: 12px; color: #c6d6ef; border-top: 1px solid #334564; padding-top: 11px; }
+.claim-card p { font-size: 15px; color: #b7c8e4; line-height: 1.55; margin: 17px 0 20px; }
+.status-list { list-style: none; margin: 0; padding: 16px 0 0; border-top: 1px solid #334564; display: grid; gap: 9px; font-size: 13px; color: #c6d6ef; }
+.status-list li { display: flex; align-items: center; gap: 9px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.dot-ok { background: #61e2a1; box-shadow: 0 0 10px #61e2a155; }
+.dot-wait { background: #f2c14e; box-shadow: 0 0 10px #f2c14e44; }
 
 .download-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 17px; }
 .download-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; }
@@ -160,6 +185,8 @@ h1, h2, h3, p, dl, dd { margin: 0; }
 .site-footer nav { gap: 17px 25px; flex-wrap: wrap; }
 
 @media (max-width: 960px) {
+  .machine-grid { grid-template-columns: repeat(2, 1fr); }
+  .machine-flow ol { grid-template-columns: repeat(3, 1fr); row-gap: 8px; }
   .wrap { width: min(100% - 48px, 1192px); }
   .hero-copy { width: 55%; }
   .hero h1 { font-size: clamp(48px, 7.15vw, 77px); }
@@ -177,6 +204,11 @@ h1, h2, h3, p, dl, dd { margin: 0; }
   .feature p { grid-column: 2; }
   .feature h3 { margin: 2px 0 0; }
   .machine-panel { grid-template-columns: 1fr; }
+  .machine-grid { grid-template-columns: 1fr; }
+  .machine-flow ol { grid-template-columns: 1fr; }
+  .machine-flow li { padding: 16px 0; border-bottom: 1px solid #1b2740; }
+  .machine-hero { text-align: left; }
+  .machine-actions { justify-content: flex-start; }
   .desktop-break { display: none; }
 }
 @media (max-width: 510px) {

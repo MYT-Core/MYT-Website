@@ -1,7 +1,7 @@
 import Image from "next/image"
 import {
-  ArrowDownToLine, ArrowRight, ArrowUpRight, Box, Cpu, LockKeyhole,
-  Monitor, ShieldCheck, Terminal,
+  ArrowDownToLine, ArrowRight, ArrowUpRight, BadgeCheck, Box, Cpu, EyeOff, Fingerprint,
+  Link2, LockKeyhole, Monitor, ReceiptText, ShieldCheck, Terminal, Wallet,
 } from "lucide-react"
 import { NetworkStats } from "@/components/network-stats"
 import { mytConfig } from "@/lib/myt-config"
@@ -13,6 +13,38 @@ const features = [
   { icon: Cpu, name: "CPU-first mining", detail: "RandomX proof of work is designed for general-purpose processors." },
   { icon: Box, name: "Fixed supply", detail: "A maximum of 21 million MYT, with rewards halving on a fixed block schedule." },
 ]
+
+const machineModules = [
+  { icon: Wallet, phase: "4A", name: "Settlement", detail: "Exact-amount payments, wallet-local status, native payment proofs and wallet signatures through your own myt-wallet-rpc." },
+  { icon: Fingerprint, phase: "4B", name: "Machine identity", detail: "Offline Ed25519 identities and challenge-response authentication. No wallet, network or registry needed." },
+  { icon: Link2, phase: "4C", name: "Address binding", detail: "A two-sided, signed proof that a machine identity controls a settlement address, disclosed only when you choose." },
+  { icon: ReceiptText, phase: "4D", name: "Invoices & billing", detail: "Immutable payment requests and invoices that turn PAID only on a verified, invoice-bound payment proof." },
+  { icon: BadgeCheck, phase: "4E", name: "Reputation", detail: "Signed opinions, revocations and a local, explicit trust policy. No global score, no hidden ranking." },
+  { icon: EyeOff, phase: "4F", name: "Selective disclosure", detail: "Prove a claim such as “at least 25 verified settlements” without revealing the exact count or history." },
+]
+
+const machineFlow = [
+  { title: "Identify", detail: "The agent creates an offline machine identity and binds it to its MYT address." },
+  { title: "Request", detail: "A service issues a signed payment request and a persistent invoice." },
+  { title: "Pay", detail: "The agent pays the exact amount from its own wallet. No custodian, no API credits." },
+  { title: "Prove", detail: "A native payment proof marks the invoice PAID after ten confirmations." },
+  { title: "Build trust", detail: "Verified settlements feed reputation claims the agent can disclose selectively." },
+]
+
+const sdkExample = `from pathlib import Path
+from myt_machine import MachineSettlement, RpcConfig, WalletRpcClient
+
+password = Path("/secure/agent-a.rpc-password").read_text().rstrip("\\r\\n")
+client = WalletRpcClient(RpcConfig(
+    url="http://127.0.0.1:38083",
+    username="agent-a",
+    password=password,
+    timeout=10,
+))
+settlement = MachineSettlement(client, account_index=0, address_index=0)
+
+print(settlement.status())
+print(settlement.balance())`
 
 export default function Home() {
   return (
@@ -48,7 +80,7 @@ export default function Home() {
               </div>
             </div>
             <div className="hero-visual" aria-hidden="true">
-              <Image src="/myt-hero.webp" alt="" fill sizes="(max-width: 760px) 100vw, 58vw" preload />
+              <Image src="/myt_logo.png" alt="" fill sizes="(max-width: 760px) 100vw, 58vw" preload />
             </div>
           </div>
         </section>
@@ -88,18 +120,65 @@ export default function Home() {
         </section>
 
         <section id="machine" className="section section-machine">
-          <div className="wrap machine-panel">
-            <div className="machine-copy">
+          <div className="wrap">
+            <div className="machine-hero">
               <p className="eyebrow">MYT Machine</p>
               <h2>Give agents a way<br className="desktop-break" /> to settle.</h2>
-              <p>Wallet settlement, signed machine identities, invoices and selectively disclosed settlement claims.</p>
-              <a className="text-link" href={links.machineRelease}>View the release candidate <ArrowUpRight size={17} aria-hidden="true" /></a>
+              <p className="machine-lead">
+                An open-source Python SDK and CLI that lets software agents pay, invoice, prove payments and
+                build reputation on MYT, without accounts, API keys or a custodian. Everything runs
+                off-chain on top of your own wallet. The base chain stays a neutral settlement layer.
+              </p>
+              <div className="machine-actions">
+                <a className="button button-primary" href={links.machineRepo}>Explore MYT Machine <ArrowUpRight size={16} aria-hidden="true" /></a>
+                <a className="text-link" href={links.machineRelease}>Release candidate notes <ArrowUpRight size={16} aria-hidden="true" /></a>
+              </div>
             </div>
-            <div className="claim-card">
-              <div className="claim-title"><ShieldCheck size={22} aria-hidden="true" /> Example claim</div>
-              <code>verified_recipient_<wbr />settlement_events <span>&gt;= 25</span></code>
-              <p>The evaluator attests the threshold. The recipient can prove it while keeping the exact count private.</p>
-              <span className="review-status">External cryptographic review pending</span>
+
+            <div className="machine-grid">
+              {machineModules.map(({ icon: Icon, phase, name, detail }) => (
+                <article className="machine-module" key={phase}>
+                  <div className="module-head">
+                    <Icon size={24} strokeWidth={1.6} aria-hidden="true" />
+                    <span>{phase}</span>
+                  </div>
+                  <h3>{name}</h3>
+                  <p>{detail}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="machine-flow" aria-label="How an agent settles with MYT Machine">
+              <h3>How an agent settles</h3>
+              <ol>
+                {machineFlow.map(({ title, detail }, index) => (
+                  <li key={title}>
+                    <span className="flow-step">{String(index + 1).padStart(2, "0")}</span>
+                    <strong>{title}</strong>
+                    <p>{detail}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="machine-panel">
+              <div className="code-card">
+                <div className="code-title"><Terminal size={17} aria-hidden="true" /> Python SDK</div>
+                <pre><code>{sdkExample}</code></pre>
+              </div>
+              <div className="claim-card">
+                <div className="claim-title"><ShieldCheck size={22} aria-hidden="true" /> Selective disclosure claim</div>
+                <code>verified_recipient_<wbr />settlement_events <span>&gt;= 25</span></code>
+                <p>
+                  The evaluator attests the threshold from verified settlements. The agent proves it with a
+                  randomized BBS presentation while the exact count, history and counterparties stay private.
+                </p>
+                <ul className="status-list">
+                  <li><span className="dot dot-ok" /> 4A–4E released and tested on Linux and Windows</li>
+                  <li><span className="dot dot-wait" /> 4F (BBS disclosure) in release-candidate review</li>
+                  <li><span className="dot dot-wait" /> Independent cryptographic review pending</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
