@@ -209,7 +209,7 @@ export default function Home() {
                 )
               })}
             </div>
-            <p className="download-note">Verify the package checksum before running it. For this Windows release, choose Local Mode in the launcher.</p>
+            <p className="download-note">Verify the package checksum before running it. The Windows launcher's online mode asks for your node's TLS certificate fingerprint; without one, use Mining Mode with a local node.</p>
             <a className="text-link" href={links.core}>Build from source <ArrowRight size={16} aria-hidden="true" /></a>
           </div>
         </section>

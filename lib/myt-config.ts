@@ -1,5 +1,5 @@
 const core = "https://github.com/MYT-Core/MYT"
-const tag = "v1.0.2-mainnet"
+const tag = "v1.0.3-mainnet"
 const releaseUrl = core + "/releases/tag/" + tag
 const assetBase = core + "/releases/download/" + tag + "/"
 
@@ -23,14 +23,14 @@ export const mytConfig = {
       {
         platform: "Windows",
         format: "x86-64 · ZIP",
-        url: assetBase + "myt-v1.0.2-mainnet-win64.zip",
-        sha256: "18981435922ada2d8556fc8af77a1b45c6d0e86400666fd2223831f1873753b3",
+        url: assetBase + "myt-v1.0.3-mainnet-win64.zip",
+        sha256: "05ff36f3a80c307f5d226de1d8512266c2f8c859f4d64f34ac40a377909ee9eb",
       },
       {
         platform: "Linux",
         format: "x86-64 · TAR.GZ",
-        url: assetBase + "myt-v1.0.2-mainnet-linux-x86_64.tar.gz",
-        sha256: "0850f8d4c6edb5e7fc8a7fda2aa107e8915db0f44a34a9824d3a49971a6ac973",
+        url: assetBase + "myt-v1.0.3-mainnet-linux-x86_64.tar.gz",
+        sha256: "6cad7d36fc18d477ca9ca92110f97547e2f9fe04e59c1d0c78f252621910ba53",
       },
     ],
   },
