@@ -12,7 +12,7 @@ export const mytConfig = {
     explorerMainnet: "https://explorer.myt-coin.com/",
     explorerTestnet: "https://testnet-explorer.myt-coin.com/",
     machineRepo: "https://github.com/MYT-Core/MYT-Machine",
-    machineRelease: "https://github.com/MYT-Core/MYT-Machine/releases/tag/v0.6.0-rc1",
+    machineRelease: "https://github.com/MYT-Core/MYT-Machine/releases/tag/v0.6.0-rc2",
     discord: "https://discord.gg/nuWjx7kvqp",
     bitcointalk: "https://bitcointalk.org/index.php?topic=5577468.0",
   },
